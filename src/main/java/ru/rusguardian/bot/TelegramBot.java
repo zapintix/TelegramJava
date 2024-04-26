@@ -4,12 +4,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class TelegramBot extends TelegramLongPollingBot {
@@ -43,18 +38,13 @@ public class TelegramBot extends TelegramLongPollingBot {
             if (update.hasMessage() && update.getMessage().hasText()) {
                 Message inMess = update.getMessage();
                 String chatId = inMess.getChatId().toString();
-                String response = null;
+                String response;
                 SendMessage outMess = new SendMessage();
-                if (!inMess.getText().equals("/start") && !Objects.equals(btn, "reset")){
-                    response = parseMessage(inMess.getText());
-                    outMess.setChatId(chatId);
-                    outMess.setText(response);
-                    execute(outMess);
-                }
                 if (inMess.getText().equals("/start") || Objects.equals(btn, "reset")) {
                     response = "Выберите режим";
                     outMess.setChatId(chatId);
-                    outMess.setReplyMarkup(createInlineKeyboard());
+                    QuestionKeyboard keyboard = new QuestionKeyboard();
+                    outMess.setReplyMarkup(keyboard.setInit());
                     outMess.setText(response);
                     execute(outMess);
                     btn = "";
@@ -66,6 +56,22 @@ public class TelegramBot extends TelegramLongPollingBot {
                 SendMessage outMess = new SendMessage();
                 String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
                 outMess.setChatId(chatId);
+                if (Objects.equals(btn, "/exam")) {
+                    QuestionKeyboard keyboard = new QuestionKeyboard();
+                    outMess.setReplyMarkup(keyboard.setQuestions(exam.quest.answers));
+
+
+                }
+                if (Objects.equals(btn, "/study")){
+                    QuestionKeyboard keyboard = new QuestionKeyboard();
+                    outMess.setReplyMarkup(keyboard.setQuestions(study.quest.answers));
+
+                }
+                if (Objects.equals(btn, "/learn")){
+                    QuestionKeyboard keyboard = new QuestionKeyboard();
+                    outMess.setReplyMarkup(keyboard.setQuestions(learner.quest.answers));
+
+                }
                 outMess.setText(response);
                 execute(outMess);
             }
@@ -78,6 +84,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     public String parseMessage(String textMsg) {
         String response = null;
         if (textMsg.equals("/exam")) {
+
+            btn = "";
             btn = "/exam";
             response = exam.action(storage).getQuestion();
         }
@@ -118,21 +126,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
         else
-            response = "Сообщение не распознано";
+            response = "Не корректная команда";
         return response;
-    }
-
-    private InlineKeyboardMarkup createInlineKeyboard() {
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-
-        rowInline.add(InlineKeyboardButton.builder().text("exam").callbackData("/exam").build());
-        rowInline.add(InlineKeyboardButton.builder().text("study").callbackData("/study").build());
-        rowInline.add(InlineKeyboardButton.builder().text("learn").callbackData("/learn").build());
-
-        rowsInline.add(rowInline);
-        inlineKeyboardMarkup.setKeyboard(rowsInline);
-        return inlineKeyboardMarkup;
     }
 }

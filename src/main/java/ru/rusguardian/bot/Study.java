@@ -11,7 +11,7 @@ public class Study {
 
 
     public String end(String answer) {
-        return "Верный ответ: " + quest.answer + "\nВаш ответ: " + answer;
+        return "Верный ответ: " + quest.rightAnswer + "\nВаш ответ: " + answer + "\n";
     }
 
 }
