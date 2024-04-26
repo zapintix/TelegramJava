@@ -56,17 +56,18 @@ public class TelegramBot extends TelegramLongPollingBot {
                 SendMessage outMess = new SendMessage();
                 String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
                 outMess.setChatId(chatId);
-                if (btn == "/exam") {
+                if (Objects.equals(btn, "/exam")) {
                     QuestionKeyboard keyboard = new QuestionKeyboard();
                     outMess.setReplyMarkup(keyboard.setQuestions(exam.quest.answers));
 
+
                 }
-                if (btn == "/study"){
+                if (Objects.equals(btn, "/study")){
                     QuestionKeyboard keyboard = new QuestionKeyboard();
                     outMess.setReplyMarkup(keyboard.setQuestions(study.quest.answers));
 
                 }
-                if (btn == "/learn"){
+                if (Objects.equals(btn, "/learn")){
                     QuestionKeyboard keyboard = new QuestionKeyboard();
                     outMess.setReplyMarkup(keyboard.setQuestions(learner.quest.answers));
 
