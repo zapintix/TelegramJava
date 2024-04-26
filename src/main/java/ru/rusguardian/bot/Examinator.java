@@ -13,7 +13,7 @@ public class Examinator {
 
     public Boolean check(String answer){
 
-        return quest.answer.equals(answer);
+        return quest.rightAnswer.equals(answer);
     }
 
     public String result(Storage storage){

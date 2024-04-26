@@ -9,15 +9,15 @@ public class Learner{
     }
 
     public Boolean check(String answer){
-        return quest.answer.equals(answer);
+        return quest.rightAnswer.equals(answer);
     }
 
     public String end(String answer) {
         if (check(answer)) {
-            return "Ответ верный";
+            return "Молодец";
         }
         else {
-            return "Ответ неверный";
+            return "Дурак";
         }
     }
 }

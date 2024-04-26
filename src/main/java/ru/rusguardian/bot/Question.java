@@ -2,11 +2,14 @@ package ru.rusguardian.bot;
 
 public class Question {
     String question;
-    String answer;
+    String[] answers;
+    String rightAnswer;
 
-    public Question(String question, String answer) {
+    public Question(String question, String rightAnswer, String[] answers) {
         this.question = question;
-        this.answer = answer;
+        this.rightAnswer = rightAnswer;
+        this.answers = answers;
+
     }
 
 
